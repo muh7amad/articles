@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
+use App\Models\Favorite;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use phpDocumentor\Reflection\Types\Self_;
 use Intervention\Image\Facades\Image;
 
@@ -21,17 +26,24 @@ class ArticleController extends Controller
 public function index()
 {
 $articles = Article::all();
-return view('articles.index',compact('articles'));
+    $categories = Category::all();
+    $categoryName = 'null';
+return view('articles.index',compact('articles','categories','categoryName'));
 }
-
+public function articles(){
+        $articles = Article::with(['category'])->get();
+        return view('articles.articles',compact('articles'));
+}
     public function create(){
-        return view('articles.create');
+        $categories = Category::all();
+        return view('articles.create',compact('categories'));
     }
 
     public function save(Request $request){
         $articleTitle =$request->get('title');
         $articleDetails = $request->get('details');
         $photoURL =$request->file('photo');
+        $categoryId = $request->get('category');
         //$thumb = Image::make($photoURL->getRealPath())->resize(100,100,function ($constraint){$constraint->aspectRatio();});
 
 
@@ -52,7 +64,9 @@ $photoName ='';
 Article::create([
     'title'=>$articleTitle,
     'photo'=>$photoName,
-    'details'=>$articleDetails
+    'details'=>$articleDetails,
+    'thumb'=>$thumbName,
+    'categoryId'=> $categoryId
 
 ]);
         return back();
@@ -65,5 +79,42 @@ Article::create([
          $ppp =  DB::table('articles')->where('id',$id)->first();
        // $ttt = Article::where('id',1)->first();
         return view('articles.details',compact('ppp'));
+    }
+
+    public function getArticles($categoryId){
+        //$articles = DB::table('articles')->where('categoryId',$categoryId)->get();
+        $articles= Article::with(['category'])->where('categoryId', $categoryId)->get();
+        $categories = Category::all();
+        $categoryName = DB::table('category')->where('id',$categoryId)->first();
+        return view('articles.index',compact('articles','categories','categoryName'));
+    }
+    public function favoriteArticle($articleId){
+
+        \Auth::user()->favorites()->attach($articleId);
+        return back();
+
+
+    }
+    public function unFavoriteArticle($articleId){
+
+        \Auth::user()->favorites()->detach($articleId);
+
+        return back();
+
+
+
+    }
+    public function getMyArticles()
+    {
+        $myFavorites = \Auth::user()->favorites ;
+
+        return view('articles.myFavorites',compact('myFavorites'));
+    }
+    public function delete($articleId){
+        try {
+            Article::query()->find($articleId)->delete();
+            return Redirect::route('all_articles');
+        } catch (\Exception $e) {
+        }
     }
 }

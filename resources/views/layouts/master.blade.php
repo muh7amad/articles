@@ -16,7 +16,7 @@
     <link href="assets/css/font-awesome.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="assets/css/style.css" rel="stylesheet">--}}
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link href="{{\Illuminate\Support\Facades\URL::asset('assets/css/bootstrap.min.css')}}" rel="stylesheet">
     <link href="{{\Illuminate\Support\Facades\URL::asset('assets/css/font-awesome.min.css')}}" rel="stylesheet">
     <link href="{{\Illuminate\Support\Facades\URL::asset('assets/css/style.css')}}" rel="stylesheet">
@@ -42,7 +42,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#"><img class="img-responsive" src="{{\Illuminate\Support\Facades\URL::asset('assets/logo.png')}}" alt="Logo" /></a>
+                    <a class="navbar-brand" href="{{route('index')}}"><img class="img-responsive" src="{{\Illuminate\Support\Facades\URL::asset('assets/logo.png')}}" alt="Logo" /></a>
                 </div>
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
@@ -65,6 +65,9 @@
 
 
                                     <ul class="dropdown-menu" role="menu">
+                                        <li>
+                                            <a href="{{route('myFavorites')}}">My Articles</a>
+                                        </li>
                                    <li> <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -81,6 +84,7 @@
                                 <li class="dropdown">
                                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Menu <span class="caret"></span></a>
                                     <ul class="dropdown-menu" role="menu">
+                                        <li><a href="{{route('all_articles')}}">Articles</a></li>
                                         <li><a href="{{ route('create')}}">Add Article</a></li>
 
                                     </ul>
@@ -101,7 +105,11 @@
             <h2>Browse your favourite articles!</h2>
             <!-- paragraph -->
         </div>
+
     </div>
+
+
+
     <!-- banner end -->
 
     <!-- after banner -->
@@ -174,6 +182,44 @@
 <script src="{{\Illuminate\Support\Facades\URL::asset('assets/js/bootstrap.min.js')}}"></script>
 <script src="{{\Illuminate\Support\Facades\URL::asset('assets/js/respond.min.js')}}"></script>
 <script src="{{\Illuminate\Support\Facades\URL::asset('assets/js/custom.js')}}"></script>
+<script src="{{\Illuminate\Support\Facades\URL::asset('js/app.js')}}"></script>
 
+<script>
+    function addToFavourites(itemid) {
+
+       // document.getElementById("demo").innerHTML = "My First JavaScript";
+      /*  var article_id =itemid;
+        $.ajax({
+            type: 'post',
+            url: '/favourite/',
+            data: {
+
+                'article_id': article_id,
+            },
+            success: function () {
+                // hide add button
+                $('#addfavourites' + article_id).hide();
+                // show delete button
+                $('#deletefavourite' + article_id).show();
+            },
+            error: function (XMLHttpRequest) {
+                // handle error
+            }
+        });*/
+
+         axios.post('/favorite/'+itemid)
+        $('#addToFavourites' + itemid).hide();
+        $('#deletefavourite' + itemid).show();
+    }
+
+    function deleteFromFavourites(itemid) {
+
+
+         axios.post('/un_favorite/'+itemid)
+        $('#addToFavourites' + itemid).show();
+        $('#deletefavourite' + itemid).hide();
+
+    }
+</script>
 </body>
 </html>

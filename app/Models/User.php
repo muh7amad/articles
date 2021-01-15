@@ -40,4 +40,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function favorites()
+    {
+        return $this->belongsToMany(Article::class, 'favorites', 'user_id', 'article_id')->withTimeStamps();
+    }
 }
