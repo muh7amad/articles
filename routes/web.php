@@ -35,6 +35,8 @@ Route::get('/articles', [App\Http\Controllers\ArticleController::class, 'article
 Route::get('/articles/{categoryId}', [App\Http\Controllers\ArticleController::class, 'getArticles'])->name('articles');
 Route::get('/details/{id}', [App\Http\Controllers\ArticleController::class, 'details'])->name('single');
 Route::get('/delete/{articleId}',[App\Http\Controllers\ArticleController::class,'delete'])->name('delete-article');
+Route::get('/edit/{articleId}',[App\Http\Controllers\ArticleController::class,'edit'])->name('edit-article');
+Route::post('/update/{articleId}',[App\Http\Controllers\ArticleController::class,'update'])->name('update-article');
 
 Route::get('/create', [App\Http\Controllers\ArticleController::class, 'create'])->name('create')->middleware('admin');
 Route::post('/save',[App\Http\Controllers\ArticleController::class,'save'])->name('save-article');

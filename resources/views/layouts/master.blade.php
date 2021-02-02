@@ -127,8 +127,9 @@
     <!-- subscribe -->
     <div class="subscribe" id="subscribe">
         <div class="container">
+            <h3 class="text-center">Add Ad Here</h3>
             <!-- subscribe content -->
-            <div class="sub-content">
+           {{-- <div class="sub-content">
                 <h3>Subscribe Here for Updates</h3>
                 <form role="form">
                     <div class="input-group">
@@ -139,7 +140,7 @@
                     </div><!-- /input-group -->
                 </form>
             </div>
-        </div>
+        </div>--}}
     </div>
     <!-- subscribe end -->
 

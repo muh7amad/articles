@@ -1,4 +1,7 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+@extends('layouts.master')
+
+@section('content')
+
 <form action="{{route('save-article')}}" method="post" enctype="multipart/form-data">
 <div class="form-horizontal">
     <h3>Create New Article</h3>
@@ -13,7 +16,7 @@
 <div class="form-group">
         <label class="control-label col-md-2">Details</label>
     <div class="col-md-4">
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Article Details" name="details"></textarea>
+        <textarea class="form-control" id="exampleFormControlTextarea1" rows="12" placeholder="Article Details" name="details"></textarea>
     </div>
 </div>
 
@@ -41,3 +44,4 @@
     @csrf
 </div>
 </form>
+@endsection

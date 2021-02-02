@@ -23,9 +23,15 @@ class ArticleController extends Controller
     {
         $this->middleware('auth');
     }
-public function index()
+public function index(Request $request)
 {
-$articles = Article::all();
+    if ($request == '') {
+        $articles = Article::with(['category'])->get();
+    }
+    else
+    {
+        $articles = Article::with(['category'])->where('title','like','%'.$request->get('term').'%')->paginate(9);
+    }
     $categories = Category::all();
     $categoryName = 'null';
 return view('articles.index',compact('articles','categories','categoryName'));
@@ -81,9 +87,22 @@ Article::create([
         return view('articles.details',compact('ppp'));
     }
 
+    public function edit($id){
+        $article = Article::query()->find($id);
+        $categories = Category::all();
+        return view('articles.edit',compact('article','categories'));
+    }
+
+    public function update(Request $request,$id){
+        $article = Article::query()->find($id);
+        $article->update($request->all());
+        $categories = Category::all();
+        return view('articles.edit',compact('article','categories'));
+
+    }
     public function getArticles($categoryId){
         //$articles = DB::table('articles')->where('categoryId',$categoryId)->get();
-        $articles= Article::with(['category'])->where('categoryId', $categoryId)->get();
+        $articles= Article::with(['category'])->where('categoryId', $categoryId)->paginate(9);
         $categories = Category::all();
         $categoryName = DB::table('category')->where('id',$categoryId)->first();
         return view('articles.index',compact('articles','categories','categoryName'));
